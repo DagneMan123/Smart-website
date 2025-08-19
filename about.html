@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - DriveEasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* About Us Section */
+        .about-section {
+            padding: 80px 0;
+            background-color: #f8fafc;
+        }
+        
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1e3a8a;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .team-img {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .team-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .team-card:hover .team-img img {
+            transform: scale(1.05);
+        }
+        
+        .team-info {
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .team-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+        
+        .team-info p.position {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .team-info p.bio {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 80px;
+            padding: 40px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            transition: all 0.5s ease;
+        }
+        
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- About Us Section -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <h2 class="section-title">Our Team</h2>
+            <p class="section-subtitle">Meet the passionate people behind DriveEasy who work tirelessly to make your car rental experience exceptional.</p>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="John Doe">
+                    </div>
+                    <div class="team-info">
+                        <h3>John Doe</h3>
+                        <p class="position">CEO & Founder</p>
+                        <p class="bio">With over 15 years in the automotive industry, John founded DriveEasy to revolutionize car rentals.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Jane Smith">
+                    </div>
+                    <div class="team-info">
+                        <h3>Jane Smith</h3>
+                        <p class="position">Operations Manager</p>
+                        <p class="bio">Jane ensures every rental experience meets our high standards of quality and customer service.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80" alt="Mike Johnson">
+                    </div>
+                    <div class="team-info">
+                        <h3>Mike Johnson</h3>
+                        <p class="position">Head of Customer Experience</p>
+                        <p class="bio">Mike and his team are available 24/7 to assist you with any questions or concerns.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" id="customers">5000+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="vehicles">200+</div>
+                    <div class="stat-label">Vehicles in Fleet</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="locations">25+</div>
+                    <div class="stat-label">Locations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="years">8+</div>
+                    <div class="stat-label">Years in Business</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Animate stats counter
+        document.addEventListener('DOMContentLoaded', function() {
+            const stats = [
+                { element: 'customers', final: 5000, increment: 100 },
+                { element: 'vehicles', final: 200, increment: 5 },
+                { element: 'locations', final: 25, increment: 1 },
+                { element: 'years', final: 8, increment: 1 }
+            ];
+            
+            // Check if element is in viewport
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+            
+            // Animate counter
+            function animateCounter(element, final, increment) {
+                let current = 0;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= final) {
+                        clearInterval(timer);
+                        current = final;
+                    }
+                    element.textContent = current === final ? `${current}+` : current;
+                }, 20);
+            }
+            
+            // Start animation when stats are visible
+            function checkStats() {
+                stats.forEach(stat => {
+                    const element = document.getElementById(stat.element);
+                    if (isInViewport(element) && !element.classList.contains('animated')) {
+                        element.classList.add('animated');
+                        animateCounter(element, stat.final, stat.increment);
+                    }
+                });
+            }
+            
+            // Check on scroll and on load
+            window.addEventListener('scroll', checkStats);
+            checkStats();
+            
+            // Team card hover effects
+            const teamCards = document.querySelectorAll('.team-card');
+            teamCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.querySelector('.team-img img').style.transform = 'scale(1.05)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.querySelector('.team-img img').style.transform = 'scale(1)';
+                });
+            });
+        });
+        // Wait for page to load
+document.addEventListener('DOMContentLoaded', function() {
+  // Social media URLs (replace with your actual links)
+  const socialUrls = {
+    linkedin: "https://www.linkedin.com/company/your-company",
+    twitter: "https://twitter.com/your-handle", 
+    instagram: "https://instagram.com/your-handle"
+  };
+
+  // Get all social links
+  const socialLinks = document.querySelectorAll('.social-links a');
+  
+  // Make each link functional
+  socialLinks.forEach(link => {
+    // Get platform from icon class (fa-linkedin-in -> linkedin)
+    const iconClass = link.querySelector('i').className;
+    const platform = iconClass.split(' ')[1].split('-')[1];
+    
+    // Set proper URL
+    if (socialUrls[platform]) {
+      link.href = socialUrls[platform];
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    }
+    
+    // Add click tracking
+    link.addEventListener('click', function(e) {
+      console.log(`Clicked ${platform} link`);
+      
+      // For analytics (uncomment if needed):
+      // gtag('event', 'social_click', {
+      //   'event_category': 'Social',
+      //   'event_label': platform
+      // });
+    });
+  });
+});
+        
+    </script>
+</body>
+</html>
