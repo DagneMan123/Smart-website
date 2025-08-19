@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEasy - Premium Car Rentals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles & Variables */
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #f59e0b;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #94a3b8;
+            --dark-gray: #64748b;
+            --white: #ffffff;
+            --black: #000000;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            margin-bottom: 3rem;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links ul {
+            display: flex;
+            margin-right: 30px;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .language-selector {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .language-selector select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--gray-color);
+            background-color: var(--white);
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Vehicles Section */
+        .vehicles {
+            background-color: #f1f5f9;
+        }
+
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .vehicle-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .vehicle-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .vehicle-card:hover .vehicle-image img {
+            transform: scale(1.05);
+        }
+
+        .vehicle-info {
+            padding: 20px;
+        }
+
+        .vehicle-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .vehicle-specs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+
+        .vehicle-spec {
+            display: flex;
+            align-items: center;
+        }
+
+        .vehicle-spec i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .vehicle-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--dark-gray);
+        }
+
+        /* Locations Section */
+        .locations {
+            background-color: var(--white);
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .location-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            box-shadow: var(--shadow);
+        }
+
+        .location-image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .location-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .location-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: var(--white);
+            padding: 20px;
+        }
+
+        .location-overlay h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Policies Section */
+        .policies {
+            background-color: #f1f5f9;
+        }
+
+        .policies-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .policy-item {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .policy-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-color);
+            color: var(--white);
+            padding: 60px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .nav-links ul {
+                margin-right: 15px;
+            }
+
+            .nav-links li {
+                margin-left: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: var(--white);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links ul {
+                flex-direction: column;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .language-selector {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                padding: 8px 15px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-bottom p {
+                margin-bottom: 15px;
+            }
+        }/* Features/Reservations Section */
+.features {
+    padding: 80px 0;
+    background-color: #f8fafc;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+    z-index: -1;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.feature-icon i {
+    font-size: 1.8rem;
+    color: #3b82f6;
+    transition: all 0.4s ease;
+}
+
+.feature-card:hover .feature-icon i {
+    color: white;
+    transform: rotateY(360deg);
+}
+
+.feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #1e293b;
+    transition: color 0.3s ease;
+}
+
+.feature-card:hover h3 {
+    color: #3b82f6;
+}
+
+.feature-card p {
+    color: #64748b;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+.feature-card:hover p {
+    color: #475569;
+}
+
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+        
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">Drive<span>Easy</span></a>
+            
+            <nav class="nav-links">
+                <ul>
+                
+                    <li><a href="#reservations">Reservations</a></li>
+                    <li><a href="#vehicles">Vehicles</a></li>
+                    <li><a href="#locations">Locations</a></li>
+                    <li><a href="#policies">Policies</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                
+                </ul>
+                
+                <div class="language-selector">
+                    <select id="languageSelect">
+                        <option value="en" selected>English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+                
+            </nav>
+            
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Premium Car Rental Services</h1>
+                <p>Experience the freedom of the open road with our wide selection of luxury and economy vehicles at competitive prices.</p>
+                <a href="#reservations" class="btn btn-primary">Book Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features/Reservations Section -->
+    <section class="section features" id="reservations">
+        <div class="container">
+            <h2 class="section-title">Easy Reservations</h2>
+            <p class="section-subtitle">Rent a car in just a few simple steps</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Choose Dates</h3>
+                    <p>Select your pickup and return dates to see available vehicles.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Select Vehicle</h3>
+                    <p>Browse our fleet and choose the perfect vehicle for your needs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h3>Complete Booking</h3>
+                    <p>Provide your details and confirm your reservation in minutes.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Pick Up & Drive</h3>
+                    <p>Collect your vehicle at your chosen location and enjoy the ride.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehicles Section -->
+    <section class="section vehicles" id="vehicles">
+        <div class="container">
+            <h2 class="section-title">Our Vehicle Fleet</h2>
+            <p class="section-subtitle">Choose from our wide selection of premium vehicles</p>
+            
+            <div class="vehicles-grid">
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Economy Car">
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Toyota Corolla</h3>
+                        <div class="vehicle-specs">
+                            <div class="vehicle-spec">
+                                <i class="fas fa-users"></i>
+                                <span>5 seats</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-gas-pump"></i>
+                                <span>Hybrid</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-cogs"></i>
+                                <span>Automatic</span>
+                            </div>
+                        </div>
+                        <div class="vehicle-price">
+                            <div class="price">$45<span>/day</span></div>
+                            <a href="#" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="SUV">
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Ford Explorer</h3>
+                        <div class="vehicle-specs">
+                            <div class="vehicle-spec">
+                                <i class="fas fa-users"></i>
+                                <span>7 seats</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-gas-pump"></i>
+                                <span>Gasoline</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-cogs"></i>
+                                <span>Automatic</span>
+                            </div>
+                        </div>
+                        <div class="vehicle-price">
+                            <div class="price">$75<span>/day</span></div>
+                            <a href="#" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80" alt="Luxury Car">
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Mercedes S-Class</h3>
+                        <div class="vehicle-specs">
+                            <div class="vehicle-spec">
+                                <i class="fas fa-users"></i>
+                                <span>5 seats</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-gas-pump"></i>
+                                <span>Premium</span>
+                            </div>
+                            <div class="vehicle-spec">
+                                <i class="fas fa-cogs"></i>
+                                <span>Automatic</span>
+                            </div>
+                        </div>
+                        <div class="vehicle-price">
+                            <div class="price">$120<span>/day</span></div>
+                            <a href="#" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section class="section locations" id="locations">
+        <div class="container">
+            <h2 class="section-title">Our Locations</h2>
+            <p class="section-subtitle">Find us in these convenient locations</p>
+            
+            <div class="locations-grid">
+                <div class="location-card">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1518391846015-55a9cc003b25?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Downtown Location">
+                    </div>
+                    <div class="location-overlay">
+                        <h3>Downtown</h3>
+                        <p>123 Main Street</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1144&q=80" alt="Airport Location">
+                    </div>
+                    <div class="location-overlay">
+                        <h3>International Airport</h3>
+                        <p>Terminal 3, Arrivals Level</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Beach Location">
+                    </div>
+                    <div class="location-overlay">
+                        <h3>Beachfront</h3>
+                        <p>456 Ocean Boulevard</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Policies Section -->
+    <section class="section policies" id="policies">
+        <div class="container">
+            <h2 class="section-title">Rental Policies</h2>
+            <p class="section-subtitle">Important information about our rental terms</p>
+            
+            <div class="policies-container">
+                <div class="policy-item">
+                    <h3>Age Requirements</h3>
+                    <p>Minimum rental age is 21 years. Drivers under 25 may be subject to a young renter fee. Some vehicle classes have higher minimum age requirements.</p>
+                </div>
+                
+                <div class="policy-item">
+                    <h3>Insurance Options</h3>
+                    <p>We offer several insurance options to protect you during your rental. Basic coverage is included, with options to upgrade for additional protection.</p>
+                </div>
+                
+                <div class="policy-item">
+                    <h3>Cancellation Policy</h3>
+                    <p>Reservations may be cancelled free of charge up to 24 hours before pickup. Late cancellations may incur a fee.</p>
+                </div>
+                
+                <div class="policy-item">
+                    <h3>Fuel Policy</h3>
+                    <p>Our standard policy is "full-to-full." You receive the car with a full tank and must return it full. Prepaid fuel options are also available.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">Drive<span>Easy</span></div>
+                    <p>Premium car rental services with a focus on customer satisfaction and quality vehicles.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#reservations">Reservations</a></li>
+                        <li><a href="#vehicles">Vehicles</a></li>
+                        <li><a href="#locations">Locations</a></li>
+                        <li><a href="#policies">Policies</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="press.html">Press</a></li>
+                        <li><a href="partners.html">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="help.html">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 DriveEasy. All Rights Reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if(this.getAttribute('href') === '#') return;
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if(navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // Language Selector
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.addEventListener('change', (e) => {
+            // In a real application, this would change the site language
+            console.log('Language changed to:', e.target.value);
+            alert(`Language changed to ${e.target.options[e.target.selectedIndex].text}`);
+        });
+        
+        // Sticky Header on Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            header.classList.toggle('sticky', window.scrollY > 0);
+        });
+        
+        // Active Link Highlighting
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-links ul li a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if(pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if(item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+    // Social media links functionality
+    const socialLinks = document.querySelectorAll('.social-links a');
+    
+    // Add click event to each social link
+    socialLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get which social platform was clicked
+            const icon = this.querySelector('i');
+            let url;
+            
+            switch(icon.classList[1]) {
+                case 'fa-facebook-f':
+                    url = 'https://www.facebook.com/DriveEasyRentals';
+                    break;
+                case 'fa-twitter':
+                    url = 'https://twitter.com/DriveEasyRentals';
+                    break;
+                case 'fa-instagram':
+                    url = 'https://www.instagram.com/DriveEasyRentals';
+                    break;
+                case 'fa-linkedin-in':
+                    url = 'https://www.linkedin.com/company/DriveEasyRentals';
+                    break;
+                default:
+                    url = '#';
+            }
+            
+            // Add click animation
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+            
+            // Open social media link after slight delay for animation
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 300);
+        });
+        
+        // Add hover effects
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            const icon = this.querySelector('i');
+            icon.style.color = '#a855f7'; // Purple color
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            const icon = this.querySelector('i');
+            icon.style.color = 'white';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Language translations dictionary
+    const translations = {
+        en: {
+            // Header & Navigation
+            "logo": "DriveEasy",
+            "reservations": "Reservations",
+            "vehicles": "Vehicles",
+            "locations": "Locations",
+            "policies": "Policies",
+            "about_us": "About Us",
+            "blog": "Blog",
+            
+            // Hero Section
+            "hero_title": "Premium Car Rental Services",
+            "hero_subtitle": "Experience the freedom of the open road with our wide selection of luxury and economy vehicles at competitive prices.",
+            "book_now": "Book Now",
+            
+            // Features Section
+            "easy_reservations": "Easy Reservations",
+            "reservations_subtitle": "Rent a car in just a few simple steps",
+            "choose_dates": "Choose Dates",
+            "choose_dates_desc": "Select your pickup and return dates to see available vehicles.",
+            "select_vehicle": "Select Vehicle",
+            "select_vehicle_desc": "Browse our fleet and choose the perfect vehicle for your needs.",
+            "complete_booking": "Complete Booking",
+            "complete_booking_desc": "Provide your details and confirm your reservation in minutes.",
+            "pickup_drive": "Pick Up & Drive",
+            "pickup_drive_desc": "Collect your vehicle at your chosen location and enjoy the ride.",
+            
+            // Vehicles Section
+            "our_fleet": "Our Vehicle Fleet",
+            "fleet_subtitle": "Choose from our wide selection of premium vehicles",
+            "toyota_corolla": "Toyota Corolla",
+            "ford_explorer": "Ford Explorer",
+            "mercedes_sclass": "Mercedes S-Class",
+            "seats": "seats",
+            "hybrid": "Hybrid",
+            "gasoline": "Gasoline",
+            "premium": "Premium",
+            "automatic": "Automatic",
+            "per_day": "/day",
+            
+            // Locations Section
+            "our_locations": "Our Locations",
+            "locations_subtitle": "Find us in these convenient locations",
+            "downtown": "Downtown",
+            "downtown_address": "123 Main Street",
+            "airport": "International Airport",
+            "airport_address": "Terminal 3, Arrivals Level",
+            "beachfront": "Beachfront",
+            "beachfront_address": "456 Ocean Boulevard",
+            
+            // Policies Section
+            "rental_policies": "Rental Policies",
+            "policies_subtitle": "Important information about our rental terms",
+            "age_requirements": "Age Requirements",
+            "age_requirements_desc": "Minimum rental age is 21 years. Drivers under 25 may be subject to a young renter fee. Some vehicle classes have higher minimum age requirements.",
+            "insurance_options": "Insurance Options",
+            "insurance_options_desc": "We offer several insurance options to protect you during your rental. Basic coverage is included, with options to upgrade for additional protection.",
+            "cancellation_policy": "Cancellation Policy",
+            "cancellation_policy_desc": "Reservations may be cancelled free of charge up to 24 hours before pickup. Late cancellations may incur a fee.",
+            "fuel_policy": "Fuel Policy",
+            "fuel_policy_desc": "Our standard policy is 'full-to-full.' You receive the car with a full tank and must return it full. Prepaid fuel options are also available.",
+            
+            // Footer
+            "footer_slogan": "Premium car rental services with a focus on customer satisfaction and quality vehicles.",
+            "quick_links": "Quick Links",
+            "home": "Home",
+            "company": "Company",
+            "support": "Support",
+            "contact_us": "Contact Us",
+            "faqs": "FAQs",
+            "privacy_policy": "Privacy Policy",
+            "terms_service": "Terms of Service",
+            "help_center": "Help Center",
+            "copyright": "© 2023 DriveEasy. All Rights Reserved."
+        },
+        es: {
+            "logo": "DriveEasy",
+            "reservations": "Reservaciones",
+            "vehicles": "Vehículos",
+            "locations": "Ubicaciones",
+            "policies": "Políticas",
+            "about_us": "Sobre Nosotros",
+            "blog": "Blog",
+            "hero_title": "Servicios Premium de Alquiler de Autos",
+            "hero_subtitle": "Experimente la libertad de la carretera con nuestra amplia selección de vehículos de lujo y económicos a precios competitivos.",
+            "book_now": "Reservar Ahora",
+            "easy_reservations": "Reservaciones Fáciles",
+            "reservations_subtitle": "Alquile un auto en solo unos simples pasos",
+            "choose_dates": "Seleccionar Fechas",
+            "choose_dates_desc": "Seleccione sus fechas de recogida y devolución para ver los vehículos disponibles.",
+            "select_vehicle": "Seleccionar Vehículo",
+            "select_vehicle_desc": "Explore nuestra flota y elija el vehículo perfecto para sus necesidades.",
+            "complete_booking": "Completar Reserva",
+            "complete_booking_desc": "Proporcione sus detalles y confirme su reserva en minutos.",
+            "pickup_drive": "Recoger y Conducir",
+            "pickup_drive_desc": "Recoja su vehículo en la ubicación elegida y disfrute del viaje.",
+            "our_fleet": "Nuestra Flota de Vehículos",
+            "fleet_subtitle": "Elija entre nuestra amplia selección de vehículos premium",
+            "toyota_corolla": "Toyota Corolla",
+            "ford_explorer": "Ford Explorer",
+            "mercedes_sclass": "Mercedes Clase S",
+            "seats": "asientos",
+            "hybrid": "Híbrido",
+            "gasoline": "Gasolina",
+            "premium": "Premium",
+            "automatic": "Automático",
+            "per_day": "/día",
+            "our_locations": "Nuestras Ubicaciones",
+            "locations_subtitle": "Encuéntrenos en estas ubicaciones convenientes",
+            "downtown": "Centro",
+            "downtown_address": "Calle Principal 123",
+            "airport": "Aeropuerto Internacional",
+            "airport_address": "Terminal 3, Nivel de Llegadas",
+            "beachfront": "Frente a la Playa",
+            "beachfront_address": "Bulevar del Océano 456",
+            "rental_policies": "Políticas de Alquiler",
+            "policies_subtitle": "Información importante sobre nuestros términos de alquiler",
+            "age_requirements": "Requisitos de Edad",
+            "age_requirements_desc": "La edad mínima para alquilar es de 21 años. Los conductores menores de 25 años pueden estar sujetos a una tarifa adicional. Algunas clases de vehículos tienen requisitos de edad mínima más altos.",
+            "insurance_options": "Opciones de Seguro",
+            "insurance_options_desc": "Ofrecemos varias opciones de seguro para protegerlo durante su alquiler. La cobertura básica está incluida, con opciones para mejorar la protección.",
+            "cancellation_policy": "Política de Cancelación",
+            "cancellation_policy_desc": "Las reservas pueden cancelarse sin cargo hasta 24 horas antes de la recogida. Las cancelaciones tardías pueden incurrir en una tarifa.",
+            "fuel_policy": "Política de Combustible",
+            "fuel_policy_desc": "Nuestra política estándar es 'lleno-a-lleno'. Recibe el auto con el tanque lleno y debes devolverlo lleno. También hay opciones de combustible prepago disponibles.",
+            "footer_slogan": "Servicios premium de alquiler de autos con enfoque en satisfacción del cliente y vehículos de calidad.",
+            "quick_links": "Enlaces Rápidos",
+            "home": "Inicio",
+            "company": "Empresa",
+            "support": "Soporte",
+            "contact_us": "Contáctenos",
+            "faqs": "Preguntas Frecuentes",
+            "privacy_policy": "Política de Privacidad",
+            "terms_service": "Términos de Servicio",
+            "help_center": "Centro de Ayuda",
+            "copyright": "© 2023 DriveEasy. Todos los derechos reservados."
+        },
+        fr: {
+            "logo": "DriveEasy",
+            "reservations": "Réservations",
+            "vehicles": "Véhicules",
+            "locations": "Emplacements",
+            "policies": "Politiques",
+            "about_us": "À propos",
+            "blog": "Blog",
+            "hero_title": "Services Premium de Location de Voitures",
+            "hero_subtitle": "Profitez de la liberté de la route avec notre large sélection de véhicules de luxe et économiques à des prix compétitifs.",
+            "book_now": "Réserver Maintenant",
+            "easy_reservations": "Réservations Faciles",
+            "reservations_subtitle": "Louez une voiture en quelques étapes simples",
+            "choose_dates": "Choisir les Dates",
+            "choose_dates_desc": "Sélectionnez vos dates de prise en charge et de retour pour voir les véhicules disponibles.",
+            "select_vehicle": "Sélectionner un Véhicule",
+            "select_vehicle_desc": "Parcourez notre flotte et choisissez le véhicule parfait pour vos besoins.",
+            "complete_booking": "Terminer la Réservation",
+            "complete_booking_desc": "Fournissez vos coordonnées et confirmez votre réservation en quelques minutes.",
+            "pickup_drive": "Récupérer et Conduire",
+            "pickup_drive_desc": "Récupérez votre véhicule à l'emplacement choisi et profitez de la conduite.",
+            "our_fleet": "Notre Flotte de Véhicules",
+            "fleet_subtitle": "Choisissez parmi notre large sélection de véhicules premium",
+            "toyota_corolla": "Toyota Corolla",
+            "ford_explorer": "Ford Explorer",
+            "mercedes_sclass": "Mercedes Classe S",
+            "seats": "places",
+            "hybrid": "Hybride",
+            "gasoline": "Essence",
+            "premium": "Premium",
+            "automatic": "Automatique",
+            "per_day": "/jour",
+            "our_locations": "Nos Emplacements",
+            "locations_subtitle": "Retrouvez-nous dans ces emplacements pratiques",
+            "downtown": "Centre-ville",
+            "downtown_address": "123 Rue Principale",
+            "airport": "Aéroport International",
+            "airport_address": "Terminal 3, Niveau Arrivées",
+            "beachfront": "En Front de Mer",
+            "beachfront_address": "456 Boulevard de l'Océan",
+            "rental_policies": "Politiques de Location",
+            "policies_subtitle": "Informations importantes sur nos conditions de location",
+            "age_requirements": "Exigences d'Âge",
+            "age_requirements_desc": "L'âge minimum de location est de 21 ans. Les conducteurs de moins de 25 ans peuvent être soumis à des frais supplémentaires. Certaines catégories de véhicules ont des exigences d'âge minimum plus élevées.",
+            "insurance_options": "Options d'Assurance",
+            "insurance_options_desc": "Nous proposons plusieurs options d'assurance pour vous protéger pendant votre location. Une couverture de base est incluse, avec des options pour une protection supplémentaire.",
+            "cancellation_policy": "Politique d'Annulation",
+            "cancellation_policy_desc": "Les réservations peuvent être annulées gratuitement jusqu'à 24 heures avant la prise en charge. Les annulations tardives peuvent entraîner des frais.",
+            "fuel_policy": "Politique de Carburant",
+            "fuel_policy_desc": "Notre politique standard est 'plein-plein'. Vous recevez la voiture avec un réservoir plein et devez la rendre pleine. Des options de carburant prépayé sont également disponibles.",
+            "footer_slogan": "Services premium de location de voitures axés sur la satisfaction client et des véhicules de qualité.",
+            "quick_links": "Liens Rapides",
+            "home": "Accueil",
+            "company": "Entreprise",
+            "support": "Support",
+            "contact_us": "Contactez-nous",
+            "faqs": "FAQs",
+            "privacy_policy": "Politique de Confidentialité",
+            "terms_service": "Conditions d'Utilisation",
+            "help_center": "Centre d'Aide",
+            "copyright": "© 2023 DriveEasy. Tous droits réservés."
+        },
+        de: {
+            "logo": "DriveEasy",
+            "reservations": "Reservierungen",
+            "vehicles": "Fahrzeuge",
+            "locations": "Standorte",
+            "policies": "Richtlinien",
+            "about_us": "Über Uns",
+            "blog": "Blog",
+            "hero_title": "Premium Autovermietung",
+            "hero_subtitle": "Erleben Sie die Freiheit der Straße mit unserer großen Auswahl an Luxus- und Wirtschaftsfahrzeugen zu wettbewerbsfähigen Preisen.",
+            "book_now": "Jetzt Buchen",
+            "easy_reservations": "Einfache Reservierungen",
+            "reservations_subtitle": "Mieten Sie ein Auto in nur wenigen einfachen Schritten",
+            "choose_dates": "Daten Wählen",
+            "choose_dates_desc": "Wählen Sie Ihre Abhol- und Rückgabedaten, um verfügbare Fahrzeuge zu sehen.",
+            "select_vehicle": "Fahrzeug Auswählen",
+            "select_vehicle_desc": "Durchsuchen Sie unsere Flotte und wählen Sie das perfekte Fahrzeug für Ihre Bedürfnisse.",
+            "complete_booking": "Buchung Abschließen",
+            "complete_booking_desc": "Geben Sie Ihre Daten ein und bestätigen Sie Ihre Reservierung in wenigen Minuten.",
+            "pickup_drive": "Abholen & Fahren",
+            "pickup_drive_desc": "Holen Sie Ihr Fahrzeug am gewählten Standort ab und genießen Sie die Fahrt.",
+            "our_fleet": "Unsere Fahrzeugflotte",
+            "fleet_subtitle": "Wählen Sie aus unserer großen Auswahl an Premium-Fahrzeugen",
+            "toyota_corolla": "Toyota Corolla",
+            "ford_explorer": "Ford Explorer",
+            "mercedes_sclass": "Mercedes S-Klasse",
+            "seats": "Sitze",
+            "hybrid": "Hybrid",
+            "gasoline": "Benzin",
+            "premium": "Premium",
+            "automatic": "Automatik",
+            "per_day": "/Tag",
+            "our_locations": "Unsere Standorte",
+            "locations_subtitle": "Finden Sie uns an diesen praktischen Standorten",
+            "downtown": "Innenstadt",
+            "downtown_address": "Hauptstraße 123",
+            "airport": "Internationaler Flughafen",
+            "airport_address": "Terminal 3, Ankunftsebene",
+            "beachfront": "Strandlage",
+            "beachfront_address": "Ozeanboulevard 456",
+            "rental_policies": "Vermietungsrichtlinien",
+            "policies_subtitle": "Wichtige Informationen zu unseren Mietbedingungen",
+            "age_requirements": "Altersvoraussetzungen",
+            "age_requirements_desc": "Das Mindestalter für die Anmietung beträgt 21 Jahre. Fahrer unter 25 Jahren können mit einer Jungfahrergebühr belastet werden. Einige Fahrzeugklassen haben höhere Mindestaltersanforderungen.",
+            "insurance_options": "Versicherungsoptionen",
+            "insurance_options_desc": "Wir bieten mehrere Versicherungsoptionen zum Schutz während Ihrer Mietzeit an. Die Grundversicherung ist inklusive, mit Optionen für zusätzlichen Schutz.",
+            "cancellation_policy": "Stornierungsbedingungen",
+            "cancellation_policy_desc": "Reservierungen können bis zu 24 Stunden vor der Abholung kostenlos storniert werden. Spätere Stornierungen können Gebühren verursachen.",
+            "fuel_policy": "Kraftstoffrichtlinie",
+            "fuel_policy_desc": "Unsere Standardrichtlinie ist 'voll-voll'. Sie erhalten das Auto mit vollem Tank und müssen es voll zurückgeben. Vorausbezahlte Kraftstoffoptionen sind ebenfalls verfügbar.",
+            "footer_slogan": "Premium-Autovermietung mit Fokus auf Kundenzufriedenheit und qualitativ hochwertigen Fahrzeugen.",
+            "quick_links": "Schnellzugriff",
+            "home": "Startseite",
+            "company": "Unternehmen",
+            "support": "Support",
+            "contact_us": "Kontakt",
+            "faqs": "FAQs",
+            "privacy_policy": "Datenschutz",
+            "terms_service": "Nutzungsbedingungen",
+            "help_center": "Hilfe-Center",
+            "copyright": "© 2023 DriveEasy. Alle Rechte vorbehalten."
+        }
+    };
+
+    // Language selector functionality
+    const languageSelect = document.getElementById('languageSelect');
+    
+    // Function to update all text content based on selected language
+    function updateLanguage(lang) {
+        // Update all elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
+        });
+
+        // Update all input placeholders with data-i18n-placeholder attribute
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder');
+            if (translations[lang] && translations[lang][key]) {
+                element.setAttribute('placeholder', translations[lang][key]);
+            }
+        });
+
+        // Update HTML lang attribute
+        document.documentElement.lang = lang;
+
+        // Save language preference
+        localStorage.setItem('preferredLanguage', lang);
+    }
+
+    // Initialize with saved language or default to English
+    const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    languageSelect.value = savedLanguage;
+    updateLanguage(savedLanguage);
+
+    // Handle language change
+    languageSelect.addEventListener('change', function() {
+        const selectedLanguage = this.value;
+        updateLanguage(selectedLanguage);
+        
+        // Show feedback
+        const feedback = document.createElement('div');
+        feedback.style.position = 'fixed';
+        feedback.style.bottom = '20px';
+        feedback.style.left = '50%';
+        feedback.style.transform = 'translateX(-50%)';
+        feedback.style.backgroundColor = '#2563eb';
+        feedback.style.color = 'white';
+        feedback.style.padding = '12px 24px';
+        feedback.style.borderRadius = '5px';
+        feedback.style.zIndex = '1000';
+        feedback.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        feedback.textContent = `Language changed to ${this.options[this.selectedIndex].text}`;
+        document.body.appendChild(feedback);
+        
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => document.body.removeChild(feedback), 500);
+        }, 3000);
+    });
+
+    // Add data-i18n attributes to all elements that need translation
+    function initializeTranslationElements() {
+        // Header & Navigation
+        document.querySelector('.logo').setAttribute('data-i18n', 'logo');
+        document.querySelector('a[href="#reservations"]').setAttribute('data-i18n', 'reservations');
+        document.querySelector('a[href="#vehicles"]').setAttribute('data-i18n', 'vehicles');
+        document.querySelector('a[href="#locations"]').setAttribute('data-i18n', 'locations');
+        document.querySelector('a[href="#policies"]').setAttribute('data-i18n', 'policies');
+        document.querySelector('a[href="about.html"]').setAttribute('data-i18n', 'about_us');
+        document.querySelector('a[href="blog.html"]').setAttribute('data-i18n', 'blog');
+
+        // Hero Section
+        document.querySelector('.hero h1').setAttribute('data-i18n', 'hero_title');
+        document.querySelector('.hero p').setAttribute('data-i18n', 'hero_subtitle');
+        document.querySelector('.hero .btn').setAttribute('data-i18n', 'book_now');
+
+        // Features Section
+        document.querySelector('#reservations .section-title').setAttribute('data-i18n', 'easy_reservations');
+        document.querySelector('#reservations .section-subtitle').setAttribute('data-i18n', 'reservations_subtitle');
+        
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards[0].querySelector('h3').setAttribute('data-i18n', 'choose_dates');
+        featureCards[0].querySelector('p').setAttribute('data-i18n', 'choose_dates_desc');
+        featureCards[1].querySelector('h3').setAttribute('data-i18n', 'select_vehicle');
+        featureCards[1].querySelector('p').setAttribute('data-i18n', 'select_vehicle_desc');
+        featureCards[2].querySelector('h3').setAttribute('data-i18n', 'complete_booking');
+        featureCards[2].querySelector('p').setAttribute('data-i18n', 'complete_booking_desc');
+        featureCards[3].querySelector('h3').setAttribute('data-i18n', 'pickup_drive');
+        featureCards[3].querySelector('p').setAttribute('data-i18n', 'pickup_drive_desc');
+
+        // Vehicles Section
+        document.querySelector('#vehicles .section-title').setAttribute('data-i18n', 'our_fleet');
+        document.querySelector('#vehicles .section-subtitle').setAttribute('data-i18n', 'fleet_subtitle');
+        
+        const vehicleCards = document.querySelectorAll('.vehicle-card');
+        vehicleCards[0].querySelector('h3').setAttribute('data-i18n', 'toyota_corolla');
+        vehicleCards[1].querySelector('h3').setAttribute('data-i18n', 'ford_explorer');
+        vehicleCards[2].querySelector('h3').setAttribute('data-i18n', 'mercedes_sclass');
+        
+        // Update vehicle specs (seats, fuel type, transmission)
+        document.querySelectorAll('.vehicle-spec span').forEach((spec, index) => {
+            if (index % 3 === 0) { // seats
+                spec.setAttribute('data-i18n', 'seats');
+            } else if (index % 3 === 1) { // fuel type
+                const fuelTypes = ['hybrid', 'gasoline', 'premium'];
+                spec.setAttribute('data-i18n', fuelTypes[Math.floor(index/3)]);
+            } else { // transmission
+                spec.setAttribute('data-i18n', 'automatic');
+            }
+        });
+
+        // Locations Section
+        document.querySelector('#locations .section-title').setAttribute('data-i18n', 'our_locations');
+        document.querySelector('#locations .section-subtitle').setAttribute('data-i18n', 'locations_subtitle');
+        
+        const locationCards = document.querySelectorAll('.location-overlay h3');
+        locationCards[0].setAttribute('data-i18n', 'downtown');
+        locationCards[1].setAttribute('data-i18n', 'airport');
+        locationCards[2].setAttribute('data-i18n', 'beachfront');
+        
+        const locationAddresses = document.querySelectorAll('.location-overlay p');
+        locationAddresses[0].setAttribute('data-i18n', 'downtown_address');
+        locationAddresses[1].setAttribute('data-i18n', 'airport_address');
+        locationAddresses[2].setAttribute('data-i18n', 'beachfront_address');
+
+        // Policies Section
+        document.querySelector('#policies .section-title').setAttribute('data-i18n', 'rental_policies');
+        document.querySelector('#policies .section-subtitle').setAttribute('data-i18n', 'policies_subtitle');
+        
+        const policyItems = document.querySelectorAll('.policy-item h3');
+        policyItems[0].setAttribute('data-i18n', 'age_requirements');
+        policyItems[1].setAttribute('data-i18n', 'insurance_options');
+        policyItems[2].setAttribute('data-i18n', 'cancellation_policy');
+        policyItems[3].setAttribute('data-i18n', 'fuel_policy');
+        
+        const policyDescriptions = document.querySelectorAll('.policy-item p');
+        policyDescriptions[0].setAttribute('data-i18n', 'age_requirements_desc');
+        policyDescriptions[1].setAttribute('data-i18n', 'insurance_options_desc');
+        policyDescriptions[2].setAttribute('data-i18n', 'cancellation_policy_desc');
+        policyDescriptions[3].setAttribute('data-i18n', 'fuel_policy_desc');
+
+        // Footer Section
+        document.querySelector('.footer-col p').setAttribute('data-i18n', 'footer_slogan');
+        document.querySelectorAll('.footer-col h3')[1].setAttribute('data-i18n', 'quick_links');
+        document.querySelectorAll('.footer-col h3')[2].setAttribute('data-i18n', 'company');
+        document.querySelectorAll('.footer-col h3')[3].setAttribute('data-i18n', 'support');
+        
+        const footerLinks = document.querySelectorAll('.footer-col ul li a');
+        footerLinks[0].setAttribute('data-i18n', 'home');
+        footerLinks[1].setAttribute('data-i18n', 'reservations');
+        footerLinks[2].setAttribute('data-i18n', 'vehicles');
+        footerLinks[3].setAttribute('data-i18n', 'locations');
+        footerLinks[4].setAttribute('data-i18n', 'policies');
+        footerLinks[5].setAttribute('data-i18n', 'about_us');
+        footerLinks[6].setAttribute('data-i18n', 'blog');
+        footerLinks[7].setAttribute('data-i18n', 'careers');
+        footerLinks[8].setAttribute('data-i18n', 'press');
+        footerLinks[9].setAttribute('data-i18n', 'partners');
+        footerLinks[10].setAttribute('data-i18n', 'contact_us');
+        footerLinks[11].setAttribute('data-i18n', 'faqs');
+        footerLinks[12].setAttribute('data-i18n', 'privacy_policy');
+        footerLinks[13].setAttribute('data-i18n', 'terms_service');
+        footerLinks[14].setAttribute('data-i18n', 'help_center');
+        
+        document.querySelector('.footer-bottom p').setAttribute('data-i18n', 'copyright');
+    }
+
+    // Initialize translation elements on page load
+    initializeTranslationElements();
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Vehicle data with availability status
+    const vehicles = [
+        {
+            id: 1,
+            name: "Toyota Corolla",
+            type: "sedan",
+            price: 45,
+            image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+            available: true
+        },
+        {
+            id: 2,
+            name: "Ford Explorer",
+            type: "suv",
+            price: 75,
+            image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+            available: true
+        },
+        {
+            id: 3,
+            name: "Mercedes S-Class",
+            type: "luxury",
+            price: 120,
+            image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
+            available: true
+        }
+    ];
+
+    // Add event listeners to all Book Now buttons
+    document.querySelectorAll('.vehicle-card .btn-primary').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Find the vehicle card
+            const card = this.closest('.vehicle-card');
+            const vehicleId = parseInt(card.getAttribute('data-id'));
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            
+            if (!vehicle) {
+                showAlert('Vehicle not found!', 'error');
+                return;
+            }
+            
+            if (!vehicle.available) {
+                showAlert('This vehicle is already booked!', 'error');
+                return;
+            }
+
+            // Create and show booking modal
+            const modal = createBookingModal(vehicle);
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            modal.querySelector('#startDate').min = today;
+            modal.querySelector('#endDate').min = today;
+
+            // Close modal when clicking outside or on close button
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal || e.target.classList.contains('close-modal')) {
+                    closeModal();
+                }
+            });
+
+            // Handle form submission
+            modal.querySelector('#bookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const startDate = formData.get('startDate');
+                const endDate = formData.get('endDate');
+                
+                // Validate dates
+                if (new Date(endDate) <= new Date(startDate)) {
+                    showAlert('Return date must be after pickup date', 'error');
+                    return;
+                }
+
+                // Process booking
+                processBooking(vehicle, {
+                    startDate: startDate,
+                    endDate: endDate,
+                    fullName: formData.get('fullName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone')
+                });
+            });
+
+            // Update price when dates change
+            modal.querySelector('#startDate').addEventListener('change', updatePrice);
+            modal.querySelector('#endDate').addEventListener('change', updatePrice);
+
+            function updatePrice() {
+                const startDate = modal.querySelector('#startDate').value;
+                const endDate = modal.querySelector('#endDate').value;
+                
+                if (startDate && endDate) {
+                    const days = calculateDays(startDate, endDate);
+                    modal.querySelector('#daysCount').textContent = days;
+                    modal.querySelector('#totalPrice').textContent = `$${vehicle.price * days}`;
+                }
+            }
+
+            function closeModal() {
+                document.body.removeChild(modal);
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+
+    // Helper functions
+    function calculateDays(startDate, endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffTime = Math.abs(end - start);
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+    }
+
+    function processBooking(vehicle, bookingData) {
+        // Calculate days and total
+        const days = calculateDays(bookingData.startDate, bookingData.endDate);
+        const total = vehicle.price * days;
+        
+        // Mark vehicle as booked
+        vehicle.available = false;
+        
+        // Update the book now button
+        const bookButton = document.querySelector(`.vehicle-card[data-id="${vehicle.id}"] .btn-primary`);
+        if (bookButton) {
+            bookButton.textContent = 'Booked';
+            bookButton.style.backgroundColor = '#28a745';
+            bookButton.disabled = true;
+        }
+        
+        // Close modal
+        document.querySelector('.booking-modal').remove();
+        document.body.style.overflow = 'auto';
+        
+        // Show success message
+        showAlert(`Success! You've booked the ${vehicle.name} for ${days} day(s). Total: $${total}`, 'success');
+        
+        // In a real app, you would send this data to your backend
+        console.log('Booking details:', {
+            vehicle: vehicle.name,
+            pricePerDay: vehicle.price,
+            ...bookingData,
+            days: days,
+            total: total
+        });
+    }
+
+    function createBookingModal(vehicle) {
+        const modal = document.createElement('div');
+        modal.className = 'booking-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Book ${vehicle.name}</h2>
+                <p>$${vehicle.price} per day</p>
+                
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="startDate">Pickup Date</label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="endDate">Return Date</label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="price-summary">
+                        <p>Daily Rate: <span>$${vehicle.price}</span></p>
+                        <p>Rental Days: <span id="daysCount">0</span></p>
+                        <p class="total">Total: <span id="totalPrice">$0</span></p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </form>
+            </div>
+        `;
+        return modal;
+    }
+
+    function showAlert(message, type) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        document.body.appendChild(alert);
+        
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => document.body.removeChild(alert), 300);
+        }, 3000);
+    }
+
+    // Add CSS for modal and alerts
+    const style = document.createElement('style');
+    style.textContent = `
+        .booking-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .price-summary {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .price-summary p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .price-summary .total {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .alert {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        
+        .alert-success {
+            background-color: #28a745;
+        }
+        
+        .alert-error {
+            background-color: #dc3545;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add data-id attributes to vehicle cards if not already present
+    document.querySelectorAll('.vehicle-card').forEach((card, index) => {
+        if (!card.hasAttribute('data-id')) {
+            card.setAttribute('data-id', index + 1);
+        }
+    });
+});
+    </script>
+</body>
+</html>

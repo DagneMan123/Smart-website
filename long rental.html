@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEasy - Long Term Car Rentals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .navbar ul li a:hover {
+            color: var(--primary);
+        }
+
+        .navbar ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        .navbar ul li a:hover:after {
+            width: 100%;
+        }
+
+        .auth-buttons .btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn.primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn.secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn.secondary:hover {
+            background-color: #e69009;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Auth Modals */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-container {
+            background-color: white;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .auth-close:hover {
+            color: var(--dark);
+        }
+
+        .auth-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .auth-form input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .auth-form .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error messages */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Success message */
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        /* Hero Section */
+        .long-term-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            color: white;
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .long-term-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1900&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .long-term-hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .long-term-hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .long-term-hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 15px auto 30px;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-size: 18px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .benefit-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .benefit-card.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 30px;
+        }
+
+        .benefit-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 80px 0;
+            background-color: #f1f5f9;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .pricing-table.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-table th, .pricing-table td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .pricing-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        .pricing-table tr:nth-child(even) {
+            background-color: white;
+        }
+
+        .pricing-table tr:nth-child(odd) {
+            background-color: #f8fafc;
+        }
+
+        .pricing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .pricing-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Process Section */
+        .process-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .process-steps:before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary) 0%, var(--secondary) 100%);
+            z-index: 1;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        .process-step.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: 600;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .process-step h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            background-color: #f1f5f9;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        .faq-item.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background-color: #f8fafc;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 20px 20px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .payment-methods i {
+            font-size: 24px;
+            margin-left: 15px;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+
+        .payment-methods i:hover {
+            color: white;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            color: #333;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: #e0e0e0;
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        /* Specific colors for each platform */
+        .social-links a:hover .fa-facebook-f { color: #3b5998; }
+        .social-links a:hover .fa-twitter { color: #1da1f2; }
+        .social-links a:hover .fa-instagram { color: #e1306c; }
+        .social-links a:hover .fa-linkedin-in { color: #0077b5; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .navbar {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .process-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .process-steps:before {
+                display: none;
+            }
+
+            .process-step {
+                margin-bottom: 40px;
+                text-align: center;
+            }
+
+            .step-number {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .long-term-hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-methods {
+                margin-top: 20px;
+            }
+
+            .auth-container {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+       /* Benefits Section Background & Animations */
+.benefits-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+/* Animated Background Elements */
+.benefits-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+  animation: float 25s linear infinite;
+  z-index: 0;
+}
+
+.benefits-section::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  right: -10%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+  animation: floatReverse 30s linear infinite;
+  z-index: 0;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(5%, 5%) rotate(5deg); }
+  50% { transform: translate(10%, 0) rotate(0deg); }
+  75% { transform: translate(5%, -5%) rotate(-5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes floatReverse {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-5%, 5%) rotate(-5deg); }
+  50% { transform: translate(-10%, 0) rotate(0deg); }
+  75% { transform: translate(-5%, -5%) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Benefits Grid */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Benefit Cards */
+.benefit-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(30, 58, 138, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.benefit-card.animated {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(30, 58, 138, 0.12);
+}
+
+/* Benefit Icons */
+.benefit-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: white;
+  font-size: 30px;
+  transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+  transform: rotate(15deg) scale(1.1);
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+}
+
+/* Section Title Styling */
+.section-title {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 15px;
+  color: var(--dark);
+  position: relative;
+  z-index: 1;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  margin: 15px auto 30px;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.6s ease 0.3s;
+}
+
+.section-title.animated::after {
+  transform: scaleX(1);
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--gray);
+  max-width: 700px;
+  margin: 0 auto 50px;
+  font-size: 18px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease 0.2s;
+}
+
+.section-subtitle.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+  /* Benefit Card Hover and Active States */
+.benefit-card {
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    background-color: #f8f9fa; /* Light hover background */
+}
+
+.benefit-card:active {
+    background-color: #e9ecef; /* Slightly darker when clicked */
+    transform: translateY(-2px);
+}
+
+/* If you want a specific color for hover/click */
+.benefit-card:hover {
+    background-color: #f0f7ff; /* Light blue hover */
+}
+
+.benefit-card:active {
+    background-color: #e1f0ff; /* Slightly darker blue when clicked */
+}
+
+/* Alternative: If you want to keep the card style but just change color on click */
+.benefit-card:active {
+    background-color: #e1f0ff;
+}      
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Drive<span>Easy</span></a>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="vehicle.html">Vehicle</a></li>
+                    <li><a href="service.html">Service</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn" id="login-btn">Sign In</a>
+                <a href="#" class="btn primary" id="register-btn">Register</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="auth-modal" id="login-modal">
+        <div class="auth-container">
+            <span class="auth-close" id="login-close">&times;</span>
+            <h2 class="auth-title">Sign In</h2>
+            <form class="auth-form" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required placeholder="Enter your email">
+                    <div class="error-message" id="login-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="Enter your password">
+                    <div class="error-message" id="login-password-error"></div>
+                </div>
+                <button type="submit" class="btn primary">Sign In</button>
+                <div class="success-message" id="login-success"></div>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" id="switch-to-register">Register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="auth-modal" id="register-modal">
+        <div class="auth-container">
+            <span class="auth-close" id="register-close">&times;</span>
+            <h2 class="auth-title">Create Account</h2>
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" required placeholder="Enter your full name">
+                    <div class="error-message" id="register-name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required placeholder="Enter your email">
+                    <div class="error-message" id="register-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required placeholder="Create a password">
+                    <div class="error-message" id="register-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirm Password</label>
+                    <input type="password" id="register-confirm" required placeholder="Confirm your password">
+                    <div class="error-message" id="register-confirm-error"></div>
+                </div>
+                <button type="submit" class="btn primary">Create Account</button>
+                <div class="success-message" id="register-success"></div>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" id="switch-to-login">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="long-term-hero">
+        <div class="container">
+            <h1>Long Term Car Rental Solutions</h1>
+            <p>Flexible, cost-effective vehicle solutions for businesses and individuals needing extended rentals from one month to several years.</p>
+            <div class="hero-btns">
+                <a href="#pricing" class="btn secondary">View Pricing</a>
+                <a href="#contact" class="btn primary">Get a Quote</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose DriveEasy for Long Term Rentals?</h2>
+            <p class="section-subtitle">Experience the benefits of our premium long term rental program</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Significant Savings</h3>
+                    <p>Enjoy discounts up to 45% compared to daily rates with our long term rental packages.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Maintenance Included</h3>
+                    <p>All scheduled maintenance and repairs are covered during your rental period at no extra cost.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Vehicle Flexibility</h3>
+                    <p>Option to switch vehicles during your rental period to suit changing needs.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3>Unlimited Mileage</h3>
+                    <p>Drive without worrying about mileage restrictions on all long term rentals.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Dedicated Support</h3>
+                    <p>24/7 priority customer service and dedicated account manager for long term clients.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3>Simple Billing</h3>
+                    <p>Consolidated monthly invoices with no hidden fees or surprise charges.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Long Term Rental Pricing</h2>
+            <p class="section-subtitle">Competitive rates with more savings the longer you rent</p>
+            
+            <table class="pricing-table">
+                <thead>
+                    <tr>
+                        <th>Rental Period</th>
+                        <th>Discount</th>
+                        <th>Included Benefits</th>
+                        <th>Starting At*</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>28 Days</td>
+                        <td>15% Off</td>
+                        <td>Free maintenance, unlimited mileage</td>
+                        <td class="highlight">$899/month</td>
+                    </tr>
+                    <tr>
+                        <td>3 Months</td>
+                        <td>25% Off</td>
+                        <td>Free maintenance, unlimited mileage, 1 free vehicle swap</td>
+                        <td class="highlight">$749/month</td>
+                    </tr>
+                    <tr>
+                        <td>6 Months</td>
+                        <td>35% Off</td>
+                        <td>Free maintenance, unlimited mileage, 2 free vehicle swaps</td>
+                        <td class="highlight">$649/month</td>
+                    </tr>
+                    <tr>
+                        <td>12 Months</td>
+                        <td>45% Off</td>
+                        <td>Free maintenance, unlimited mileage, monthly vehicle swaps</td>
+                        <td class="highlight">$549/month</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; margin-top: 20px; color: var(--gray);">*Prices shown for economy class. Other vehicle classes available.</p>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Getting started with your long term rental is simple</p>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Consultation</h3>
+                    <p>Speak with our long term rental specialists about your needs and requirements.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Vehicle Selection</h3>
+                    <p>Choose from our premium fleet the perfect vehicle for your needs.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Custom Agreement</h3>
+                    <p>We'll prepare a rental agreement tailored to your specific situation.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Delivery/Pickup</h3>
+                    <p>We'll deliver your vehicle or you can pick it up at one of our locations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Find answers to common questions about our long term rentals</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What's the minimum rental period for long term rentals?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our long term rentals start at 28 consecutive days. This allows us to offer you significant savings compared to daily or weekly rates.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I change vehicles during my long term rental?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Depending on your rental package, you may have free or discounted vehicle swaps available. Our 3-month package includes 1 free swap, 6-month includes 2 free swaps, and 12-month includes monthly swap options.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Are there mileage restrictions?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No, all our long term rentals include unlimited mileage so you can drive without worrying about extra charges.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What happens if the vehicle needs maintenance?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We cover all scheduled maintenance - just contact us to arrange service at one of our approved facilities. You'll receive a replacement vehicle if yours needs to be in the shop for more than 24 hours.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I extend my long term rental?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely, we're happy to extend your rental period as needed, subject to availability. We'll simply adjust your contract and continue with the same terms or update to reflect a longer rental period discount if applicable.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Ready to Start Your Long Term Rental?</h2>
+            <p>Contact our specialists today to discuss your needs and get a personalized quote.</p>
+            <div class="hero-btns">
+                <a href="tel:+18005556644" class="btn secondary"><i class="fas fa-phone"></i> Call Us: (800) 555-6644</a>
+                <a href="mailto:longterm@driveeasy.com" class="btn primary"><i class="fas fa-envelope"></i> Email Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">
+                        <a href="index.html">Drive<span>Easy</span></a>
+                    </div>
+                    <p>Premium car rental services with a focus on customer satisfaction and quality vehicles.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>  
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="vehicles.html">Vehicles</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="long-term.html">Long Term</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="long-term.html">Long Term Rental</a></li>
+                        <li><a href="services.html#short-term">Short Term Rental</a></li>
+                        <li><a href="services.html#airport">Airport Transfer</a></li>
+                        <li><a href="services.html#corporate">Corporate Rental</a></li>
+                        <li><a href="services.html#luxury">Luxury Rental</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#faq">FAQs</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="contact.html#support">Roadside Assistance</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 DriveEasy. All Rights Reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-discover"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenu = document.createElement('div');
+        mobileMenu.className = 'mobile-menu';
+        mobileMenu.innerHTML = `
+            <div class="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="vehicles.html">Vehicles</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="long-term.html" class="active">Long Term</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-auth-buttons">
+                <a href="#" class="btn" id="mobile-login-btn">Sign In</a>
+                <a href="#" class="btn primary" id="mobile-register-btn">Register</a>
+            </div>
+        `;
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            document.body.appendChild(mobileMenu);
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                mobileMenu.style.transform = 'translateX(0)';
+            }, 10);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('mobile-menu-close') || 
+                e.target.classList.contains('fa-times') ||
+                (e.target.closest('.mobile-menu') === null && !e.target.classList.contains('mobile-menu-btn') && !e.target.classList.contains('fa-bars'))) {
+                mobileMenu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(mobileMenu)) {
+                        document.body.removeChild(mobileMenu);
+                    }
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+        });
+
+        // FAQ accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Scroll animations
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.benefit-card, .pricing-table, .process-step, .faq-item');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    element.classList.add('animated');
+                }
+            });
+        }
+
+        // Initialize animations on load
+        window.addEventListener('load', animateOnScroll);
+        window.addEventListener('scroll', animateOnScroll);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Auth Modal Functionality
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const loginClose = document.getElementById('login-close');
+        const registerClose = document.getElementById('register-close');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const mobileLoginBtn = document.getElementById('mobile-login-btn');
+        const mobileRegisterBtn = document.getElementById('mobile-register-btn');
+
+        // Open modals
+        function openModal(modal) {
+            document.body.style.overflow = 'hidden';
+            modal.classList.add('active');
+        }
+
+        // Close modals
+        function closeModal(modal) {
+            document.body.style.overflow = '';
+            modal.classList.remove('active');
+        }
+
+        // Clear form errors
+        function clearErrors(formId) {
+            const form = document.getElementById(formId);
+            const errorMessages = form.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+
+        // Show error message
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // Show success message
+        function showSuccess(formId, message) {
+            const successElement = document.getElementById(formId + '-success');
+            if (successElement) {
+                successElement.textContent = message;
+                successElement.style.display = 'block';
+                setTimeout(() => {
+                    successElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Validate email format
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        // Event listeners for desktop buttons
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearErrors('login-form');
+            openModal(loginModal);
+        });
+
+        registerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearErrors('register-form');
+            openModal(registerModal);
+        });
+
+        // Event listeners for mobile menu buttons
+        if (mobileLoginBtn) {
+            mobileLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (document.querySelector('.mobile-menu')) {
+                    document.querySelector('.mobile-menu').style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (document.body.contains(document.querySelector('.mobile-menu'))) {
+                            document.body.removeChild(document.querySelector('.mobile-menu'));
+                        }
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+                clearErrors('login-form');
+                openModal(loginModal);
+            });
+        }
+
+        if (mobileRegisterBtn) {
+            mobileRegisterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (document.querySelector('.mobile-menu')) {
+                    document.querySelector('.mobile-menu').style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (document.body.contains(document.querySelector('.mobile-menu'))) {
+                            document.body.removeChild(document.querySelector('.mobile-menu'));
+                        }
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+                clearErrors('register-form');
+                openModal(registerModal);
+            });
+        }
+
+        // Close buttons
+        loginClose.addEventListener('click', () => closeModal(loginModal));
+        registerClose.addEventListener('click', () => closeModal(registerModal));
+
+        // Switch between login and register
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal(loginModal);
+            clearErrors('register-form');
+            openModal(registerModal);
+        });
+
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal(registerModal);
+            clearErrors('login-form');
+            openModal(loginModal);
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                closeModal(loginModal);
+            }
+            if (e.target === registerModal) {
+                closeModal(registerModal);
+            }
+        });
+
+        // Form submissions
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearErrors('login-form');
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!email) {
+                showError('login-email', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError('login-email', 'Please enter a valid email');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('login-password', 'Password is required');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError('login-password', 'Password must be at least 6 characters');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Simulate login (in a real app, this would be an API call)
+            const users = JSON.parse(localStorage.getItem('driveeasy_users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Successful login
+                showSuccess('login', 'Login successful! Redirecting...');
+                setTimeout(() => {
+                    closeModal(loginModal);
+                    // In a real app, you would redirect to dashboard or update UI
+                    alert(`Welcome back, ${user.name}!`);
+                }, 1500);
+            } else {
+                showError('login-password', 'Invalid email or password');
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearErrors('register-form');
+            
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const confirmPassword = document.getElementById('register-confirm').value.trim();
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!name) {
+                showError('register-name', 'Full name is required');
+                isValid = false;
+            }
+            
+            if (!email) {
+                showError('register-email', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError('register-email', 'Please enter a valid email');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('register-password', 'Password is required');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError('register-password', 'Password must be at least 6 characters');
+                isValid = false;
+            }
+            
+            if (!confirmPassword) {
+                showError('register-confirm', 'Please confirm your password');
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                showError('register-confirm', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('driveeasy_users')) || [];
+            const userExists = users.some(u => u.email === email);
+            
+            if (userExists) {
+                showError('register-email', 'Email already registered');
+                return;
+            }
+            
+            // Register the user (in a real app, this would be an API call)
+            const newUser = {
+                name,
+                email,
+                password // In a real app, you would hash the password
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('driveeasy_users', JSON.stringify(users));
+            
+            // Show success message
+            showSuccess('register', 'Registration successful! Redirecting to login...');
+            
+            // Clear form
+            document.getElementById('register-form').reset();
+            
+            // Switch to login after 2 seconds
+            setTimeout(() => {
+                closeModal(registerModal);
+                openModal(loginModal);
+            }, 2000);
+        });
+
+        // Social links functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const socialLinksConfig = {
+                'facebook-f': 'https://facebook.com',
+                'twitter': 'https://twitter.com',
+                'instagram': 'https://instagram.com',
+                'linkedin-in': 'https://linkedin.com'
+            };
+
+            const socialLinks = document.querySelectorAll('.social-links a');
+            
+            socialLinks.forEach(link => {
+                const icon = link.querySelector('i');
+                if (!icon) return;
+                
+                const iconClass = Array.from(icon.classList).find(cls => cls.startsWith('fa-'));
+                if (!iconClass) return;
+                
+                const platform = iconClass.replace('fa-', '');
+                
+                if (socialLinksConfig[platform]) {
+                    link.href = socialLinksConfig[platform];
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                }
+            });
+        });
+        // Benefits Section Animation Script
+document.addEventListener('DOMContentLoaded', function() {
+  // Animation trigger function
+  function animateBenefits() {
+    const benefitsSection = document.querySelector('.benefits-section');
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    const sectionTitle = document.querySelector('.benefits-section .section-title');
+    const sectionSubtitle = document.querySelector('.benefits-section .section-subtitle');
+    
+    // Check if element is in viewport
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.75
+      );
+    }
+    
+    // Animate elements when they come into view
+    function handleScroll() {
+      if (isInViewport(benefitsSection)) {
+        // Animate title underline
+        sectionTitle.classList.add('animated');
+        
+        // Animate subtitle
+        sectionSubtitle.classList.add('animated');
+        
+        // Animate each card with staggered delay
+        benefitCards.forEach((card, index) => {
+          setTimeout(() => {
+            card.classList.add('animated');
+          }, index * 150); // 150ms delay between each card
+        });
+        
+        // Remove event listener after animation triggers
+        window.removeEventListener('scroll', handleScroll);
+      }
+    }
+    
+    // Add hover effects to cards
+    benefitCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px) scale(1.02)';
+        this.style.boxShadow = '0 12px 40px rgba(30, 58, 138, 0.12)';
+        const icon = this.querySelector('.benefit-icon');
+        if (icon) {
+          icon.style.transform = 'rotate(15deg) scale(1.1)';
+        }
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 8px 32px rgba(30, 58, 138, 0.08)';
+        const icon = this.querySelector('.benefit-icon');
+        if (icon) {
+          icon.style.transform = 'rotate(0) scale(1)';
+        }
+      });
+    });
+    
+    // Initial check in case section is already visible
+    handleScroll();
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+  }
+  
+  // Initialize the animation
+  animateBenefits();
+});
+    </script>
+</body>
+</html>

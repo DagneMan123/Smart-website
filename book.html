@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEasy - Book Your Rental Car</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="book.css">
+    <style>
+        /* Booking System Styles */
+        .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .booking-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .booking-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .booking-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .booking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .booking-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+        
+        .step-number.active {
+            background: #2ecc71;
+        }
+        
+        .step-number.completed {
+            background: #27ae60;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #bdc3c7;
+            z-index: 0;
+        }
+        
+        .booking-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+        }
+        
+        .section-title i {
+            margin-right: 15px;
+            color: #3498db;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .datetime-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .datetime-group input {
+            flex: 2;
+        }
+        
+        .datetime-group select {
+            flex: 1;
+        }
+        
+        .location-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .location-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .location-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .location-image {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .location-info {
+            padding: 15px;
+            background: white;
+        }
+        
+        .location-info h4 {
+            margin: 0 0 5px;
+            color: #2c3e50;
+        }
+        
+        .location-info p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .vehicle-display {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .vehicle-image {
+            flex: 1;
+            max-width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        
+        .vehicle-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .vehicle-details {
+            flex: 2;
+        }
+        
+        .vehicle-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .vehicle-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-item i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .extra-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .extra-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .extra-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2);
+        }
+        
+        .extra-card.selected {
+            border-color: #2ecc71;
+            background: #f0fdf4;
+        }
+        
+        .extra-icon {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+        
+        .extra-info {
+            flex: 1;
+        }
+        
+        .extra-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .extra-desc {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .extra-price {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .price-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        
+        .booking-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        .btn-secondary:hover {
+            background: #bdc3c7;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .terms-checkbox {
+            margin-top: 20px;
+        }
+        
+        .terms-checkbox label {
+            display: flex;
+            align-items: center;
+            color: #7f8c8d;
+        }
+        
+        .terms-checkbox input {
+            margin-right: 10px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .booking-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .booking-step {
+                margin-bottom: 20px;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+            
+            .vehicle-display {
+                flex-direction: column;
+            }
+            
+            .vehicle-image {
+                max-width: 100%;
+            }
+            
+            .booking-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-container">
+        <div class="booking-header">
+            <h1>Book Your Rental Car</h1>
+            <p>Complete your reservation in just a few simple steps</p>
+            
+            <div class="booking-steps">
+                <div class="step-connector"></div>
+                <div class="booking-step">
+                    <div class="step-number active">1</div>
+                    <div class="step-title">Location & Dates</div>
+                </div>
+                <div class="booking-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Select Vehicle</div>
+                </div>
+                <div class="booking-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Extras & Review</div>
+                </div>
+                <div class="booking-step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Confirmation</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Location & Dates -->
+        <div class="booking-section" id="step1">
+            <div class="section-title">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Pickup & Return Details</h2>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="pickup-location">Pickup Location</label>
+                    <select id="pickup-location" required>
+                        <option value="">Select a location</option>
+                        <option value="miami-airport">Miami International Airport (MIA)</option>
+                        <option value="miami-downtown">Downtown Miami</option>
+                        <option value="fort-lauderdale-airport">Fort Lauderdale Airport (FLL)</option>
+                        <option value="orlando-airport">Orlando International Airport (MCO)</option>
+                        <option value="tampa-airport">Tampa International Airport (TPA)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="return-location">Return Location</label>
+                    <select id="return-location">
+                        <option value="same">Same as Pickup Location</option>
+                        <option value="miami-airport">Miami International Airport (MIA)</option>
+                        <option value="miami-downtown">Downtown Miami</option>
+                        <option value="fort-lauderdale-airport">Fort Lauderdale Airport (FLL)</option>
+                        <option value="orlando-airport">Orlando International Airport (MCO)</option>
+                        <option value="tampa-airport">Tampa International Airport (TPA)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="return-location">arrive Location</label>
+                    <select id="return-location">
+                        <option value="same">different Location</option>
+                        <option value="miami-airport">USA</option>
+                        <option value="miami-downtown">Canada</option>
+                        <option value="fort-lauderdale-airport">UK</option>
+                        <option value="orlando-airport">China</option>
+                        <option value="tampa-airport">Indian</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="location-images">
+                <div class="location-card">
+                    <div class="location-image" style="background-image: url('https://images.unsplash.com/photo-1514214246283-d427a95c5d2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="location-info">
+                        <h4>Miami Airport</h4>
+                        <p>Convenient airport location</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-image" style="background-image: url('images/minimal.png');"></div>
+                    <div class="location-info">
+                        <h4>Downtown Miami</h4>
+                        <p>Central business district</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-image" style="background-image: url('images/bech.png');"></div>
+                    <div class="location-info">
+                        <h4>Miami Beach</h4>
+                        <p>Oceanfront pickup location</p>
+                    </div>
+                </div>
+                <div class="location-card">
+                    <div class="location-image" style="background-image: url('images/hotel.png');"></div>
+                    <div class="location-info">
+                        <h4>Hotel</h4>
+                        <p>Finish location</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="pickup-date">Pickup Date & Time</label>
+                    <div class="datetime-group">
+                        <input type="date" id="pickup-date" required>
+                        <select id="pickup-time" required>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00" selected>10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="return-date">Return Date & Time</label>
+                    <div class="datetime-group">
+                        <input type="date" id="return-date" required>
+                        <select id="return-time" required>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00" selected>10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="return-date">arrive Date & Time</label>
+                    <div class="datetime-group">
+                        <input type="date" id="return-date" required>
+                        <select id="return-time" required>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00" selected>10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="booking-actions">
+                <button class="btn btn-secondary" disabled>Back</button>
+                <button class="btn btn-primary" id="next-step-1">Continue to Vehicles</button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Vehicle Selection -->
+        <div class="booking-section" id="step2" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-car"></i>
+                <h2>Select Your Vehicle</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicle-category">Vehicle Category</label>
+                <select id="vehicle-category" required>
+                    <option value="">Select a category</option>
+                    <option value="economy">Economy</option>
+                    <option value="compact">Compact</option>
+                    <option value="midsize">Mid-size</option>
+                    <option value="fullsize">Full-size</option>
+                    <option value="suv">SUV</option>
+                    <option value="luxury">Luxury</option>
+                    <option value="minivan">Minivan</option>
+                    <option value="convertible">Convertible</option>
+                </select>
+            </div>
+            
+            <div class="vehicle-display">
+                <div class="vehicle-image">
+                    <img src="https://www.carscoops.com/wp-content/uploads/2018/10/1adffbee-toyota-corolla-sema-29.jpg">
+                </div>
+                
+                <div class="vehicle-details">
+                    <h3 class="vehicle-title">Toyota Corolla or Similar</h3>
+                    <div class="vehicle-features">
+                        <div class="feature-item">
+                            <i class="fas fa-users"></i>
+                            <span>5 Passengers</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-suitcase"></i>
+                            <span>2 Large Bags</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>35 MPG</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Automatic</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-snowflake"></i>
+                            <span>A/C</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-plug"></i>
+                            <span>Bluetooth</span>
+                        </div>
+                    </div>
+                    
+                    <div class="price-summary">
+                        <div class="price-item">
+                            <span>Daily Rate:</span>
+                            <span>$45.99</span>
+                        </div>
+                        <div class="price-item">
+                            <span>Estimated Total (5 days):</span>
+                            <span>$229.95</span>
+                        </div>
+                        <div class="price-item">
+                            <span>Taxes & Fees:</span>
+                            <span>$32.19</span>
+                        </div>
+                        <div class="price-total">
+                            <span>Total Estimated Price:</span>
+                            <span>$262.14</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" style="margin-top: 15px;">
+                        <i class="fas fa-check"></i> Select This Vehicle
+                    </button>
+                </div>
+            </div>
+            
+            <div class="booking-actions">
+                <button class="btn btn-secondary" id="back-step-2">Back</button>
+                <button class="btn btn-primary" id="next-step-2">Continue to Extras</button>
+            </div>
+        </div>
+        
+        <!-- Step 3: Extras & Review -->
+        <div class="booking-section" id="step3" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-plus-circle"></i>
+                <h2>Add Extras & Review</h2>
+            </div>
+            
+            <div class="form-group">
+                <label>Insurance Options</label>
+                <div class="extra-options">
+                    <div class="extra-card selected">
+                        <div class="extra-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">Basic Coverage</div>
+                            <div class="extra-desc">Included in your rental</div>
+                        </div>
+                        <div class="extra-price">$0.00</div>
+                    </div>
+                    
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-shield-virus"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">Premium Protection</div>
+                            <div class="extra-desc">Reduced deductible to $250</div>
+                        </div>
+                        <div class="extra-price">$12.99/day</div>
+                    </div>
+                    
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">Full Coverage</div>
+                            <div class="extra-desc">Zero deductible protection</div>
+                        </div>
+                        <div class="extra-price">$19.99/day</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Additional Equipment</label>
+                <div class="extra-options">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-baby-carriage"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">Child Safety Seat</div>
+                            <div class="extra-desc">For children 4-8 years</div>
+                        </div>
+                        <div class="extra-price">$5.99/day</div>
+                    </div>
+                    
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">GPS Navigation</div>
+                            <div class="extra-desc">Turn-by-turn directions</div>
+                        </div>
+                        <div class="extra-price">$7.99/day</div>
+                    </div>
+                    
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">Additional Driver</div>
+                            <div class="extra-desc">Add another authorized driver</div>
+                        </div>
+                        <div class="extra-price">$4.99/day</div>
+                    </div>
+                    
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="extra-info">
+                            <div class="extra-title">WiFi Hotspot</div>
+                            <div class="extra-desc">Stay connected on the road</div>
+                        </div>
+                        <div class="extra-price">$6.99/day</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="special-requests">Special Requests</label>
+                <textarea id="special-requests" rows="3" placeholder="Any special requests or requirements for your rental"></textarea>
+            </div>
+            
+            <div class="price-summary">
+                <h4><i class="fas fa-receipt"></i> Rental Summary</h4>
+                
+                <div class="price-item">
+                    <span>Vehicle (Toyota Corolla):</span>
+                    <span>$229.95</span>
+                </div>
+                <div class="price-item">
+                    <span>Premium Protection:</span>
+                    <span>$64.95</span>
+                </div>
+                <div class="price-item">
+                    <span>GPS Navigation:</span>
+                    <span>$39.95</span>
+                </div>
+                <div class="price-item">
+                    <span>Taxes & Fees:</span>
+                    <span>$42.19</span>
+                </div>
+                <div class="price-total">
+                    <span>Total Estimated Price:</span>
+                    <span>$377.04</span>
+                </div>
+            </div>
+            
+            <div class="terms-checkbox">
+                <label>
+                    <input type="checkbox" required>
+                    I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Rental Agreement</a>
+                </label>
+            </div>
+            
+            <div class="booking-actions">
+                <button class="btn btn-secondary" id="back-step-3">Back</button>
+                <button class="btn btn-primary" id="next-step-3">Complete Booking</button>
+            </div>
+        </div>
+        
+        <!-- Step 4: Confirmation -->
+        <div class="booking-section" id="step4" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-check-circle"></i>
+                <h2>Booking Confirmation</h2>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 5rem; color: #2ecc71; margin-bottom: 20px;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">Your booking is confirmed!</h3>
+                <p style="color: #7f8c8d; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                    Thank you for choosing DriveEasy. Your reservation #DE456789 has been confirmed. 
+                    We've sent all the details to your email address. Please bring your driver's license 
+                    and credit card when you pick up your vehicle.
+                </p>
+                
+                <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin: 30px auto; max-width: 500px;">
+                    <h4 style="margin-top: 0; color: #2c3e50;">Booking Details</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
+                        <div style="font-weight: 600;">Pickup Location:</div>
+                        <div>Miami International Airport</div>
+                        
+                        <div style="font-weight: 600;">Pickup Date:</div>
+                        <div>June 15, 2023 at 10:00 AM</div>
+                        
+                        <div style="font-weight: 600;">Vehicle:</div>
+                        <div>Toyota Corolla or Similar</div>
+                        
+                        <div style="font-weight: 600;">Total Price:</div>
+                        <div>$377.04</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-print"></i> Print Reservation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Booking System Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step Navigation
+            document.getElementById('next-step-1').addEventListener('click', function() {
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+                updateStepProgress(2);
+            });
+            
+            document.getElementById('back-step-2').addEventListener('click', function() {
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step1').style.display = 'block';
+                updateStepProgress(1);
+            });
+            
+            document.getElementById('next-step-2').addEventListener('click', function() {
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
+                updateStepProgress(3);
+            });
+            
+            document.getElementById('back-step-3').addEventListener('click', function() {
+                document.getElementById('step3').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+                updateStepProgress(2);
+            });
+            
+            document.getElementById('next-step-3').addEventListener('click', function() {
+                document.getElementById('step3').style.display = 'none';
+                document.getElementById('step4').style.display = 'block';
+                updateStepProgress(4);
+            });
+            
+            // Update step progress indicators
+            function updateStepProgress(currentStep) {
+                const steps = document.querySelectorAll('.booking-step');
+                
+                steps.forEach((step, index) => {
+                    const number = step.querySelector('.step-number');
+                    
+                    if (index + 1 < currentStep) {
+                        number.classList.remove('active');
+                        number.classList.add('completed');
+                        number.innerHTML = '<i class="fas fa-check"></i>';
+                    } else if (index + 1 === currentStep) {
+                        number.classList.add('active');
+                        number.classList.remove('completed');
+                        number.textContent = index + 1;
+                    } else {
+                        number.classList.remove('active', 'completed');
+                        number.textContent = index + 1;
+                    }
+                });
+            }
+            
+            // Extra selection functionality
+            const extraCards = document.querySelectorAll('.extra-card');
+            extraCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // For insurance options (radio behavior)
+                    if (this.querySelector('input[type="radio"]')) {
+                        document.querySelectorAll('.extra-card').forEach(c => {
+                            c.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    } 
+                    // For equipment options (checkbox behavior)
+                    else if (this.querySelector('input[type="checkbox"]')) {
+                        this.classList.toggle('selected');
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                    }
+                });
+            });
+            
+            // Set default dates
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            
+            document.getElementById('pickup-date').valueAsDate = today;
+            document.getElementById('return-date').valueAsDate = tomorrow;
+            
+            // Vehicle category change
+            document.getElementById('vehicle-category').addEventListener('change', function() {
+                // In a real implementation, this would update the vehicle display
+                // For this demo, we'll just show a different image
+                const vehicleImage = document.querySelector('.vehicle-image img');
+                const category = this.value;
+                
+                const images = {
+                    'economy': 'https://images.unsplash.com/photo-1549317661-bd32bbc8b13d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'compact': 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'midsize': 'https://images.unsplash.com/photo-1547038577-da80abbc4f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'fullsize': 'https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'suv': 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'luxury': 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'minivan': 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                    'convertible': 'https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+                };
+                
+                if (images[category]) {
+                    vehicleImage.src = images[category];
+                }
+            });
+        });
+    </script>
+    <script src="book.js"></script>
+
+</body>
+</html>

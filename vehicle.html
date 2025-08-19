@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2563eb;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .search-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 30px auto;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .vehicle-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .vehicle-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .vehicle-details {
+            padding: 20px;
+        }
+        
+        .vehicle-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .vehicle-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .vehicle-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+        
+        .no-results {
+            text-align: center;
+            grid-column: 1/-1;
+            padding: 40px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+        }
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+        background: linear-gradient(-45deg, #f8f9fa, #e9ecef, #dee2e6, #ced4da);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        color: #343a40;
+        min-height: 100vh;
+    }
+    
+    header {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: white;
+        padding: 30px 0;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        animation: headerFadeIn 1.5s ease-out;
+    }
+    
+    .search-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin: 30px auto;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .search-container:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+    
+    .vehicle-card {
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .vehicle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* Animations */
+    @keyframes gradientBG {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    
+    @keyframes headerFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Find Your Perfect Rental Car</h1>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="search-container">
+            <div class="search-form">
+                <div class="form-group">
+                    <label for="location"><i class="fas fa-map-marker-alt"></i> Select Location</label>
+                    <select id="location">
+                        <option value="all">All Locations</option>
+                        <option value="new-york">New York</option>
+                        <option value="los-angeles">Los Angeles</option>
+                        <option value="miami">Miami</option>
+                        <option value="chicago">Chicago</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="type"><i class="fas fa-car"></i> Vehicle Type</label>
+                    <select id="type">
+                        <option value="all">All Types</option>
+                        <option value="sedan">Sedan</option>
+                        <option value="suv">SUV</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="convertible">Convertible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="search-btn">Search Vehicles</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-container" id="results">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script >
+        document.addEventListener('DOMContentLoaded', function() {
+    // Sample vehicle data with appropriate images
+    const vehicles = [
+        {
+            id: 1,
+            name: "Toyota Camry",
+            type: "sedan",
+            location: "new-york",
+            price: 65,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+            id: 2,
+            name: "Honda CR-V",
+            type: "suv",
+            location: "los-angeles",
+            price: 85,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+            id: 3,
+            name: "BMW 5 Series",
+            type: "luxury",
+            location: "miami",
+            price: 120,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+            id: 4,
+            name: "Ford Mustang Convertible",
+            type: "convertible",
+            location: "chicago",
+            price: 110,
+            seats: 4,
+            transmission: "Manual",
+            image: "https://images.unsplash.com/photo-1600861195091-690c92f1d2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+            id: 5,
+            name: "Chevrolet Malibu",
+            type: "sedan",
+            location: "new-york",
+            price: 60,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://m.media-amazon.com/images/I/61Rx9tHudUL._AC_UF1000,1000_QL80_.jpg"
+        },
+        {
+            id: 6,
+            name: "Jeep Grand Cherokee",
+            type: "suv",
+            location: "los-angeles",
+            price: 90,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+        }
+    ];
+
+    const searchBtn = document.getElementById('search-btn');
+    const resultsContainer = document.getElementById('results');
+
+    // Display all vehicles initially
+    displayVehicles(vehicles);
+
+    // Search functionality
+    searchBtn.addEventListener('click', function() {
+        const location = document.getElementById('location').value;
+        const type = document.getElementById('type').value;
+
+        const filteredVehicles = vehicles.filter(vehicle => {
+            const locationMatch = location === 'all' || vehicle.location === location;
+            const typeMatch = type === 'all' || vehicle.type === type;
+            return locationMatch && typeMatch;
+        });
+
+        displayVehicles(filteredVehicles);
+    });
+
+    // Function to display vehicles
+    function displayVehicles(vehiclesToDisplay) {
+        resultsContainer.innerHTML = '';
+
+        if (vehiclesToDisplay.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-car" style="font-size: 48px; margin-bottom: 20px;"></i>
+                    <h3>No vehicles found matching your criteria</h3>
+                    <p>Try adjusting your search filters</p>
+                </div>
+            `;
+            return;
+        }
+
+        vehiclesToDisplay.forEach(vehicle => {
+            const vehicleCard = document.createElement('div');
+            vehicleCard.className = 'vehicle-card';
+            vehicleCard.innerHTML = `
+                <img src="${vehicle.image}" alt="${vehicle.name}" class="vehicle-image">
+                <div class="vehicle-details">
+                    <h3 class="vehicle-name">${vehicle.name}</h3>
+                    <div class="vehicle-info">
+                        <span><i class="fas fa-users"></i> ${vehicle.seats} seats</span>
+                        <span>${vehicle.transmission}</span>
+                    </div>
+                    <div class="vehicle-price">$${vehicle.price}<small>/day</small></div>
+                    <button style="width: 100%; margin-top: 10px;">Rent Now</button>
+                </div>
+            `;
+            resultsContainer.appendChild(vehicleCard);
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // ... [keep all your existing vehicle data and initial setup code] ...
+
+    // Function to display vehicles
+    function displayVehicles(vehiclesToDisplay) {
+        resultsContainer.innerHTML = '';
+
+        if (vehiclesToDisplay.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-car" style="font-size: 48px; margin-bottom: 20px;"></i>
+                    <h3>No vehicles found matching your criteria</h3>
+                    <p>Try adjusting your search filters</p>
+                </div>
+            `;
+            return;
+        }
+
+        vehiclesToDisplay.forEach(vehicle => {
+            const vehicleCard = document.createElement('div');
+            vehicleCard.className = 'vehicle-card';
+            vehicleCard.innerHTML = `
+                <img src="${vehicle.image}" alt="${vehicle.name}" class="vehicle-image">
+                <div class="vehicle-details">
+                    <h3 class="vehicle-name">${vehicle.name}</h3>
+                    <div class="vehicle-info">
+                        <span><i class="fas fa-users"></i> ${vehicle.seats} seats</span>
+                        <span>${vehicle.transmission}</span>
+                    </div>
+                    <div class="vehicle-price">$${vehicle.price}<small>/day</small></div>
+                    <button class="rent-btn" data-id="${vehicle.id}" style="width: 100%; margin-top: 10px;">
+                        Rent Now
+                    </button>
+                </div>
+            `;
+            resultsContainer.appendChild(vehicleCard);
+        });
+
+        // Rent Now button functionality
+        document.querySelectorAll('.rent-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const vehicleId = parseInt(this.getAttribute('data-id'));
+                const vehicle = vehicles.find(v => v.id === vehicleId);
+                
+                // Create a simple alert confirmation
+                const isConfirmed = confirm(`Confirm rental for ${vehicle.name} at $${vehicle.price}/day?`);
+                
+                if (isConfirmed) {
+                    // Simulate successful rental
+                    alert(`Success! You've rented the ${vehicle.name}. Enjoy your trip!`);
+                    
+                    // Here you would typically:
+                    // 1. Send data to your backend
+                    // 2. Process payment
+                    // 3. Update availability
+                    
+                    // For demo purposes, we'll just disable the button
+                    this.textContent = 'Rented!';
+                    this.style.backgroundColor = '#28a745';
+                    this.disabled = true;
+                }
+            });
+        });
+    }
+
+    // ... [keep the rest of your existing code] ...
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Sample vehicle data
+    const vehicles = [
+        {
+            id: 1,
+            name: "Toyota Camry",
+            type: "sedan",
+            location: "new-york",
+            price: 65,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+            available: true
+        },
+        {
+            id: 2,
+            name: "Honda CR-V",
+            type: "suv",
+            location: "los-angeles",
+            price: 85,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+            available: true
+        },
+        {
+            id: 3,
+            name: "BMW 5 Series",
+            type: "luxury",
+            location: "miami",
+            price: 120,
+            seats: 5,
+            transmission: "Automatic",
+            image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+            available: true
+        },
+        {
+            id: 4,
+            name: "Ford Mustang Convertible",
+            type: "convertible",
+            location: "chicago",
+            price: 110,
+            seats: 4,
+            transmission: "Manual",
+            image: "https://images.unsplash.com/photo-1600861195091-690c92f1d2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+            available: true
+        }
+    ];
+
+    // Function to handle vehicle rental
+    function rentVehicle(vehicleId) {
+        const vehicle = vehicles.find(v => v.id === vehicleId);
+        
+        if (!vehicle) {
+            alert('Vehicle not found!');
+            return;
+        }
+        
+        if (!vehicle.available) {
+            alert('This vehicle is already rented!');
+            return;
+        }
+
+        // Create a more stylish confirmation dialog
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        modal.style.zIndex = '1000';
+        
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%;">
+                <h2 style="margin-bottom: 20px; color: #2563eb;">Confirm Rental</h2>
+                <p>You are about to rent:</p>
+                <div style="display: flex; align-items: center; margin: 15px 0;">
+                    <img src="${vehicle.image}" alt="${vehicle.name}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 15px;">
+                    <div>
+                        <h3 style="margin: 0;">${vehicle.name}</h3>
+                        <p style="margin: 5px 0; color: #666;">$${vehicle.price}/day</p>
+                    </div>
+                </div>
+                <div style="margin: 20px 0;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Rental Duration (days):</label>
+                    <input type="number" id="rental-days" min="1" max="30" value="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button id="confirm-rent" style="flex: 1; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;">
+                        Confirm Rental
+                    </button>
+                    <button id="cancel-rent" style="flex: 1; padding: 12px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Handle confirmation
+        document.getElementById('confirm-rent').addEventListener('click', function() {
+            const days = parseInt(document.getElementById('rental-days').value) || 1;
+            const totalPrice = vehicle.price * days;
+            
+            // Update vehicle status
+            vehicle.available = false;
+            
+            // Find and update the button in the DOM
+            const rentButton = document.querySelector(`.rent-btn[data-id="${vehicleId}"]`);
+            if (rentButton) {
+                rentButton.textContent = 'Rented!';
+                rentButton.style.backgroundColor = '#28a745';
+                rentButton.disabled = true;
+            }
+            
+            // Remove modal
+            document.body.removeChild(modal);
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.style.position = 'fixed';
+            successMsg.style.bottom = '20px';
+            successMsg.style.left = '50%';
+            successMsg.style.transform = 'translateX(-50%)';
+            successMsg.style.backgroundColor = '#28a745';
+            successMsg.style.color = 'white';
+            successMsg.style.padding = '12px 24px';
+            successMsg.style.borderRadius = '5px';
+            successMsg.style.zIndex = '1000';
+            successMsg.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            successMsg.textContent = `Success! You've rented the ${vehicle.name} for ${days} day(s). Total: $${totalPrice}`;
+            document.body.appendChild(successMsg);
+            
+            setTimeout(() => {
+                successMsg.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(successMsg), 500);
+            }, 3000);
+        });
+        
+        // Handle cancellation
+        document.getElementById('cancel-rent').addEventListener('click', function() {
+            document.body.removeChild(modal);
+        });
+    }
+
+    // Add event listeners to all Rent Now buttons
+    function setupRentButtons() {
+        document.querySelectorAll('.rent-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const vehicleId = parseInt(this.getAttribute('data-id'));
+                rentVehicle(vehicleId);
+            });
+        });
+    }
+
+    // Initialize rent buttons when displaying vehicles
+    function displayVehicles(vehiclesToDisplay) {
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = '';
+
+        if (vehiclesToDisplay.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-car" style="font-size: 48px; margin-bottom: 20px; color: #666;"></i>
+                    <h3>No vehicles found matching your criteria</h3>
+                    <p>Try adjusting your search filters</p>
+                </div>
+            `;
+            return;
+        }
+
+        vehiclesToDisplay.forEach(vehicle => {
+            const vehicleCard = document.createElement('div');
+            vehicleCard.className = 'vehicle-card';
+            vehicleCard.innerHTML = `
+                <img src="${vehicle.image}" alt="${vehicle.name}" class="vehicle-image">
+                <div class="vehicle-details">
+                    <h3 class="vehicle-name">${vehicle.name}</h3>
+                    <div class="vehicle-info">
+                        <span><i class="fas fa-users"></i> ${vehicle.seats} seats</span>
+                        <span>${vehicle.transmission}</span>
+                    </div>
+                    <div class="vehicle-price">$${vehicle.price}<small>/day</small></div>
+                    <button class="rent-btn" data-id="${vehicle.id}" 
+                            style="width: 100%; margin-top: 10px; padding: 10px; 
+                                   background-color: ${vehicle.available ? '#2563eb' : '#28a745'}; 
+                                   color: white; border: none; border-radius: 5px; 
+                                   cursor: ${vehicle.available ? 'pointer' : 'not-allowed'};"
+                            ${vehicle.available ? '' : 'disabled'}>
+                        ${vehicle.available ? 'Rent Now' : 'Rented!'}
+                    </button>
+                </div>
+            `;
+            resultsContainer.appendChild(vehicleCard);
+        });
+
+        setupRentButtons();
+    }
+
+    // Initial display of all available vehicles
+    displayVehicles(vehicles.filter(v => v.available));
+
+    // Search functionality
+    document.getElementById('search-btn').addEventListener('click', function() {
+        const location = document.getElementById('location').value;
+        const type = document.getElementById('type').value;
+
+        const filteredVehicles = vehicles.filter(vehicle => {
+            const locationMatch = location === 'all' || vehicle.location === location;
+            const typeMatch = type === 'all' || vehicle.type === type;
+            return locationMatch && typeMatch && vehicle.available;
+        });
+
+        displayVehicles(filteredVehicles);
+    });
+});
+    </script>
+</body>
+</html>

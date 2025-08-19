@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Blog with Slider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .blog-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            position: relative;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .blog-slider {
+            position: relative;
+            width: 100%;
+            margin-bottom: 50px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 450px;
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .slider-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease 0.2s;
+        }
+
+        .slider-content p {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease 0.3s;
+        }
+
+        .slider-slide.active .slider-content h3,
+        .slider-slide.active .slider-content p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .slider-nav button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .slider-nav button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .blog-card.animated {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .blog-card:nth-child(1) { transition-delay: 0.1s; }
+        .blog-card:nth-child(2) { transition-delay: 0.2s; }
+        .blog-card:nth-child(3) { transition-delay: 0.3s; }
+
+        .blog-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15);
+        }
+
+        .card-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .blog-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3);
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .card-meta i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+
+        .card-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            transition: color 0.3s ease;
+        }
+
+        .blog-card:hover .card-content h3 {
+            color: var(--primary);
+        }
+
+        .card-content p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .read-more::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: var(--accent);
+        }
+
+        .read-more:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+            background: var(--accent);
+        }
+
+        .read-more i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover i {
+            transform: translateX(5px);
+            color: var(--accent);
+        }
+
+        .blog-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .load-more {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .load-more::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .load-more:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .load-more:hover::before {
+            left: 100%;
+        }
+
+        .load-more:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 992px) {
+            .slider-container {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slider-container {
+                height: 350px;
+            }
+
+            .slider-content {
+                padding: 30px 20px;
+            }
+
+            .slider-content h3 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .slider-container {
+                height: 300px;
+            }
+
+            .slider-nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="blog-section">
+        <div class="section-header">
+            <h2>Latest Blog Posts</h2>
+            <p>Discover insightful articles and stay updated with our latest news and tips</p>
+        </div>
+
+        <div class="blog-slider">
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-slide active">
+                    <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80" alt="Featured Post 1" class="slider-image">
+                    <div class="slider-content">
+                        <h3>10 Tips for a Smooth Car Rental Experience</h3>
+                        <p>Learn how to make your next car rental experience hassle-free with these professional tips.</p>
+                    </div>
+                </div>
+                <div class="slider-slide">
+                    <img src="https://images.unsplash.com/photo-1554744512-d6c603f27c54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Featured Post 2" class="slider-image">
+                    <div class="slider-content">
+                        <h3>The Future of Electric Vehicle Rentals</h3>
+                        <p>Exploring how electric vehicles are transforming the car rental industry.</p>
+                    </div>
+                </div>
+                <div class="slider-slide">
+                    <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1368&q=80" alt="Featured Post 3" class="slider-image">
+                    <div class="slider-content">
+                        <h3>Best Road Trip Destinations for Summer 2023</h3>
+                        <p>Discover the top destinations to explore this summer with our curated road trip guide.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-nav">
+                <button id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="slider-dots" id="sliderDots">
+                <div class="slider-dot active"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+            </div>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog posts will be loaded here by JavaScript -->
+        </div>
+
+        <div class="blog-actions">
+            <button class="load-more" id="loadMore">Load More Articles</button>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample blog data (in a real app, you'd fetch this from an API)
+            const blogData = [
+                {
+                    id: 1,
+                    title: "10 Tips for a Smooth Car Rental Experience",
+                    excerpt: "Learn how to make your next car rental experience hassle-free with these professional tips.",
+                    image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80",
+                    category: "Tips",
+                    date: "May 15, 2023",
+                    author: "Sarah Johnson",
+                    readTime: "5 min read"
+                },
+                {
+                    id: 2,
+                    title: "The Future of Electric Vehicle Rentals",
+                    excerpt: "Exploring how electric vehicles are transforming the car rental industry and what to expect.",
+                    image: "https://images.unsplash.com/photo-1554744512-d6c603f27c54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+                    category: "Industry",
+                    date: "April 28, 2023",
+                    author: "Michael Chen",
+                    readTime: "8 min read"
+                },
+                {
+                    id: 3,
+                    title: "Best Road Trip Destinations for Summer 2023",
+                    excerpt: "Discover the top destinations to explore this summer with our curated road trip guide.",
+                    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1368&q=80",
+                    category: "Travel",
+                    date: "April 10, 2023",
+                    author: "Emily Rodriguez",
+                    readTime: "6 min read"
+                },
+                {
+                    id: 4,
+                    title: "How to Choose the Perfect Rental Car",
+                    excerpt: "A comprehensive guide to selecting the right vehicle for your specific needs and budget.",
+                    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1583&q=80",
+                    category: "Guide",
+                    date: "March 22, 2023",
+                    author: "David Wilson",
+                    readTime: "7 min read"
+                },
+                {
+                    id: 5,
+                    title: "Understanding Rental Insurance Options",
+                    excerpt: "Breaking down the different insurance options available when renting a vehicle.",
+                    image: "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&dl=pexels-mikebirdy-170811.jpg&fm=jpg",
+                    category: "Insurance",
+                    date: "March 5, 2023",
+                    author: "Lisa Thompson",
+                    readTime: "9 min read"
+                },
+                {
+                    id: 6,
+                    title: "Seasonal Car Rental Trends to Watch",
+                    excerpt: "An analysis of how rental patterns change throughout the year and what it means for you.",
+                    image: "https://images.unsplash.com/photo-1493238792000-8113da705763?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+                    category: "Trends",
+                    date: "February 18, 2023",
+                    author: "Robert Garcia",
+                    readTime: "6 min read"
+                }
+            ];
+
+            // DOM Elements
+            const blogGrid = document.getElementById('blogGrid');
+            const loadMoreBtn = document.getElementById('loadMore');
+            const sliderContainer = document.getElementById('sliderContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const sliderDots = document.getElementById('sliderDots').children;
+            let visiblePosts = 3; // Initial number of posts to show
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slider-slide');
+            const totalSlides = slides.length;
+            let slideInterval;
+
+            // Function to create blog card HTML
+            function createBlogCard(post) {
+                return `
+                    <div class="blog-card">
+                        <div class="card-image">
+                            <img src="${post.image}" alt="${post.title}">
+                            <span class="card-badge">${post.category}</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${post.date}</span>
+                                <span><i class="far fa-user"></i> ${post.author}</span>
+                                <span><i class="far fa-clock"></i> ${post.readTime}</span>
+                            </div>
+                            <h3>${post.title}</h3>
+                            <p>${post.excerpt}</p>
+                            <a href="#" class="read-more" data-id="${post.id}">Read more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Function to render blog posts
+            function renderBlogPosts() {
+                blogGrid.innerHTML = '';
+                const postsToShow = blogData.slice(0, visiblePosts);
+                postsToShow.forEach((post, index) => {
+                    blogGrid.innerHTML += createBlogCard(post);
+                });
+
+                // Animate cards
+                const cards = document.querySelectorAll('.blog-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animated');
+                    }, index * 100);
+                });
+
+                // Hide load more button if all posts are visible
+                if (visiblePosts >= blogData.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+
+            // Initial render
+            renderBlogPosts();
+
+            // Load more button click handler
+            loadMoreBtn.addEventListener('click', function() {
+                visiblePosts += 3;
+                renderBlogPosts();
+                
+                // Smooth scroll to new items
+                setTimeout(() => {
+                    blogGrid.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            });
+
+            // Read more click handler
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('read-more') || 
+                    (e.target.parentElement && e.target.parentElement.classList.contains('read-more'))) {
+                    e.preventDefault();
+                    const readMoreLink = e.target.classList.contains('read-more') ? e.target : e.target.parentElement;
+                    const postId = readMoreLink.getAttribute('data-id');
+                    console.log(`Read more clicked for post ${postId}`);
+                    
+                    // Animation for demo purposes
+                    readMoreLink.innerHTML = 'Redirecting <i class="fas fa-spinner fa-spin"></i>';
+                    setTimeout(() => {
+                        alert(`Would normally navigate to full article ${postId}`);
+                        readMoreLink.innerHTML = 'Read more <i class="fas fa-arrow-right"></i>';
+                    }, 1000);
+                }
+            });
+
+            // Slider functions
+            function goToSlide(n) {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (n + totalSlides) % totalSlides;
+                slides[currentSlide].classList.add('active');
+                updateDots();
+                sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+
+            function nextSlide() {
+                goToSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                goToSlide(currentSlide - 1);
+            }
+
+            function updateDots() {
+                for (let i = 0; i < sliderDots.length; i++) {
+                    sliderDots[i].classList.remove('active');
+                }
+                sliderDots[currentSlide].classList.add('active');
+            }
+
+            function startSlider() {
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+
+            function resetInterval() {
+                clearInterval(slideInterval);
+                startSlider();
+            }
+
+            // Event listeners for slider
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetInterval();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetInterval();
+            });
+
+            // Dot navigation
+            for (let i = 0; i < sliderDots.length; i++) {
+                sliderDots[i].addEventListener('click', () => {
+                    goToSlide(i);
+                    resetInterval();
+                });
+            }
+
+            // Start slider
+            startSlider();
+
+            // Pause slider on hover
+            sliderContainer.parentElement.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+
+            sliderContainer.parentElement.addEventListener('mouseleave', startSlider);
+
+            // Animation on scroll
+            function animateOnScroll() {
+                const blogCards = document.querySelectorAll('.blog-card:not(.animated)');
+                
+                blogCards.forEach(card => {
+                    const cardPosition = card.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (cardPosition < screenPosition) {
+                        card.classList.add('animated');
+                    }
+                });
+            }
+
+            // Trigger animation on scroll
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on load
+        });
+    </script>
+</body>
+</html>
